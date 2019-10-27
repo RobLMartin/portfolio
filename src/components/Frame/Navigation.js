@@ -13,31 +13,31 @@ const Navigation = props => {
         {props.open && (
           <>
             <NavItem onClick={() => setSelected("/")}>
-              <Link to="/">
+              <StyledLink to="/">
                 <Span isSelected={selected === "/"} {...theme.about}>
                   About
                 </Span>
-              </Link>
+              </StyledLink>
             </NavItem>
             <NavItem onClick={() => setSelected("/experience")}>
-              <Link to="/experience">
+              <StyledLink to="/experience">
                 <Span
                   isSelected={selected.includes("/experience")}
                   {...theme.experience}
                 >
                   Experience
                 </Span>
-              </Link>
+              </StyledLink>
             </NavItem>
             <NavItem onClick={() => setSelected("/projects")}>
-              <Link to="/projects">
+              <StyledLink to="/projects">
                 <Span
                   isSelected={selected.includes("/projects")}
                   {...theme.projects}
                 >
                   Project
                 </Span>
-              </Link>
+              </StyledLink>
             </NavItem>
           </>
         )}
@@ -82,5 +82,11 @@ const NavItem = styled.div``;
 
 const Span = styled.span`
   background: ${p => (p.isSelected ? p.primary : "none")};
+  color: ${p => (p.isSelected ? "white" : "inherit")};
   padding: 0 1em;
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: inherit;
+  color: inherit;
 `;
