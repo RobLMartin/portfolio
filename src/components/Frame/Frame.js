@@ -1,14 +1,15 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useDebugValue } from "react";
 import styled from "styled-components";
 import { withRouter } from "react-router";
 import Navigation from "./Navigation";
-import { ThemeContext } from "../App";
+import { ThemeContext, PortfolioContext } from "../../index";
 
 const Frame = props => {
   const ANIMATION_SPEED = "0.3s";
   const ANIMATION_END_SPEED = "0.2s";
   const ANIMATION_DELAY = "0.1s";
   const theme = useContext(ThemeContext);
+  const portfolio = useContext(PortfolioContext);
 
   useEffect(() => {
     console.log("History Changed", props.history);
@@ -27,7 +28,7 @@ const Frame = props => {
         delay={ANIMATION_DELAY}
         endSpeed={ANIMATION_END_SPEED}
         animate={props.open}
-      />
+      ></TopBar>
       <RightBar
         speed={ANIMATION_SPEED}
         delay={ANIMATION_DELAY}

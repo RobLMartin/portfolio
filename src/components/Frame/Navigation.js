@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { ThemeContext } from "../App";
+import { ThemeContext } from "../../index";
 
 const Navigation = props => {
   const [selected, setSelected] = useState(props.history.location.pathname);
