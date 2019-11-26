@@ -1,16 +1,16 @@
-import React, { useEffect, useContext, useDebugValue } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import styled from "styled-components";
 import { withRouter } from "react-router";
 import Navigation from "./Navigation";
-import { ThemeContext, PortfolioContext } from "../../index";
+import { PortfolioContext } from "../../index";
 
 const Frame = props => {
-  const ANIMATION_SPEED = "0.3s";
-  const ANIMATION_END_SPEED = "0.2s";
+  const ANIMATION_SPEED = "0.6s";
+  const ANIMATION_END_SPEED = "0.6s";
   const ANIMATION_DELAY = "0.1s";
-  const theme = useContext(ThemeContext);
   const portfolio = useContext(PortfolioContext);
-
+  const [peek, setPeek] = useState(false);
+  const [section, setSection] = useState();
   useEffect(() => {
     console.log("History Changed", props.history);
   }, [props.history]);
@@ -46,11 +46,10 @@ const Frame = props => {
         delay={ANIMATION_DELAY}
         endSpeed={ANIMATION_END_SPEED}
         animate={props.open}
-        {...theme[sectionHelper(props.history.location.pathname)]}
       >
         {props.children}
       </Canvas>
-      <BackDrop />
+      <BackDrop animate={props.open} onClick={props.handleOpen} />
     </Layout>
   );
 };
@@ -65,12 +64,12 @@ const TopBar = styled.div`
   left: 0;
   height: ${p => (p.animate ? "100px" : "30px")};
   width: 100%
-  background-color: white;
+  background-color: ${p => p.theme.frame.primary};
   transition: ${p =>
     p.animate
-      ? "height " + p.speed + " " + p.delay + " ease-in"
-      : "height " + p.endSpeed + " ease-in"};
-  z-index: 3;
+      ? "height " + p.speed + " " + p.delay + " cubic-bezier(1, 0, 0, 1)"
+      : "height " + p.endSpeed + " cubic-bezier(1, 0, 0, 1)"};
+  z-index: 4;
   `;
 
 const RightBar = styled.div`
@@ -79,12 +78,12 @@ const RightBar = styled.div`
   top: 0;
   height: 100%;
   width: ${p => (p.animate ? "100px" : "30px")};
-  background-color: white;
+  background-color: ${p => p.theme.frame.primary};
   transition: ${p =>
     p.animate
-      ? "width " + p.speed + " " + p.delay + " ease-in"
-      : "width " + p.endSpeed + " ease-in"};
-  z-index: 3;
+      ? "width " + p.speed + " " + p.delay + " cubic-bezier(1, 0, 0, 1)"
+      : "width " + p.endSpeed + " cubic-bezier(1, 0, 0, 1)"};
+  z-index: 4;
 `;
 
 const BottomBar = styled.div`
@@ -94,33 +93,37 @@ const BottomBar = styled.div`
   height: ${p => (p.animate ? "100px" : "30px")};
   transition: ${p =>
     p.animate
-      ? "height " + p.speed + " " + p.delay + " ease-in"
-      : "height " + p.endSpeed + " ease-in"};
+      ? "height " + p.speed + " " + p.delay + " cubic-bezier(1, 0, 0, 1)"
+      : "height " + p.endSpeed + " cubic-bezier(1, 0, 0, 1)"};
   width: 100%;
-  background-color: white;
-  z-index: 3;
+  background-color: ${p => p.theme.frame.primary};
+  z-index: 4;
 `;
 const Canvas = styled.div`
   position: absolute;
-  background-color: ${p => p.primary};
+  background-color: ${p => p.theme.base.primary};
   top: 30px;
   left: 30px;
   height: calc(100% - 60px);
   width: calc(100% - 60px);
   z-index: 1;
   transition: ${p =>
-    "background-color " + p.speed + " " + p.delay + " ease-in"};
+    "background-color " +
+    p.speed +
+    " " +
+    p.delay +
+    " cubic-bezier(1, 0, 0, 1)"};
 `;
-// ${p => (p.animate ? p.speed + " " + p.delay : p.endSpeed)} " ease-in";
+// ${p => (p.animate ? p.speed + " " + p.delay : p.endSpeed)} " cubic-bezier(1, 0, 0, 1)";
 
 const BackDrop = styled.div`
   position: absolute;
+  display: ${p => (p.animate ? "border-box" : "none")}
   top: 0;
   left: 0;
   height: 100vh;
   width: 100vw;
-  background-color: ${p => p.color || "blue"};
-  transition: background-color 1s ease-in;
+  z-index: 2;
 `;
 
 const sectionHelper = section => {
